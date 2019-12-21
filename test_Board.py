@@ -3,7 +3,9 @@ from Board import Board
 from Board import Tile
 
 class TestBoard(unittest.TestCase):
+    """TODO"""
     def test_Tile(self):
+        """TODO"""
         tile = Tile()
         self.assertEqual(tile.occupied, False)
         self.assertEqual(tile.color, None)
@@ -24,6 +26,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual("[w]", tile.__str__())
 
     def test_BoardStr(self):
+        """TODO"""
         b2 = Board(2)
         self.assertEqual('|[w][b]|\n|[b][w]|\n', b2.__str__())
         # Board dimensions must be divisible by 2
@@ -37,6 +40,7 @@ class TestBoard(unittest.TestCase):
 
 
     def test_flip(self):
+        """TODO"""
         b2 = Board(2)
         self.assertRaises(AssertionError, b2.flip, -1, -1)
         self.assertRaises(AssertionError, b2.flip, 4, 4)
@@ -51,6 +55,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual('|[b][w]|\n|[w][b]|\n', b2.__str__())
 
     def test_place(self):
+        """TODO"""
         b2 = Board(2)
         self.assertRaises(AssertionError, b2.place, -1, -1, 0)
         self.assertRaises(AssertionError, b2.place, 4, 4, 0)
@@ -67,6 +72,23 @@ class TestBoard(unittest.TestCase):
         self.assertRaises(AssertionError, b4.place, 0, 0, 1)
         self.assertRaises(AssertionError, b4.place, 0, 1, 0)
         self.assertRaises(AssertionError, b4.place, 0, 1, 1)
+
+    def test_getLegal(self):
+        """TODO"""
+        b = Board()
+        legalwhite = set()
+        legalwhite.add((4, 2))
+        legalwhite.add((5, 3))
+        legalwhite.add((2, 4))
+        legalwhite.add((3, 5))
+        self.assertEqual(legalwhite, b.getLegal(player=0))
+
+        legalblack = set()
+        legalblack.add((3, 2))
+        legalblack.add((2, 3))
+        legalblack.add((5, 4))
+        legalblack.add((4, 5))
+        self.assertEqual(legalblack, b.getLegal(player=1))
 
 # To Run tests from the editor/PyCharm
 if __name__ == '__main__':
