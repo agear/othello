@@ -27,13 +27,13 @@ class TestBoard(unittest.TestCase):
 
     def test_BoardStr(self):
         """TODO"""
-        b2 = Board(2)
+        b2 = Board(dimensions=2)
         self.assertEqual('|[w][b]|\n|[b][w]|\n', b2.__str__())
         # Board dimensions must be divisible by 2
-        self.assertRaises(AssertionError, Board, 3 )
-        b4 = Board(4)
+        self.assertRaises(AssertionError, Board, dimensions=3 )
+        b4 = Board(dimensions=4)
         self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
-        b8 = Board(8)
+        b8 = Board(dimensions=8)
         self.assertEqual('|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_]' \
                          '[_][w][b][_][_][_]|\n|[_][_][_][b][w][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n' \
                          '|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
@@ -42,12 +42,12 @@ class TestBoard(unittest.TestCase):
     def test_flip(self):
         """TODO"""
         b2 = Board(2)
-        self.assertRaises(AssertionError, b2.flip, -1, -1)
-        self.assertRaises(AssertionError, b2.flip, 4, 4)
-        self.assertRaises(AssertionError, b2.flip, -1, 1)
-        self.assertRaises(AssertionError, b2.flip, 4, 1)
-        self.assertRaises(AssertionError, b2.flip, 1, -1)
-        self.assertRaises(AssertionError, b2.flip, 1, 4)
+        self.assertRaises(AssertionError, b2.flip, row=-1, col=-1)
+        self.assertRaises(AssertionError, b2.flip, row=4, col=4)
+        self.assertRaises(AssertionError, b2.flip, row=-1, col=1)
+        self.assertRaises(AssertionError, b2.flip, row=4, col=1)
+        self.assertRaises(AssertionError, b2.flip, row=1, col=-1)
+        self.assertRaises(AssertionError, b2.flip, row=1, col=4)
         b2.flip(row=0, col=0)
         b2.flip(row=0, col=1)
         b2.flip(row=1, col=0)
@@ -57,21 +57,21 @@ class TestBoard(unittest.TestCase):
     def test_place(self):
         """TODO"""
         b2 = Board(2)
-        self.assertRaises(AssertionError, b2.place, -1, -1, 0)
-        self.assertRaises(AssertionError, b2.place, 4, 4, 0)
-        self.assertRaises(AssertionError, b2.place, -1, 1, 0)
-        self.assertRaises(AssertionError, b2.place, 4, 1, 1)
-        self.assertRaises(AssertionError, b2.place, 1, -1, 1)
-        self.assertRaises(AssertionError, b2.place, 1, 4, 1)
+        self.assertRaises(AssertionError, b2.place, row=-1, col=-1, player=0)
+        self.assertRaises(AssertionError, b2.place, row=4, col=4, player=0)
+        self.assertRaises(AssertionError, b2.place, row=-1, col=1, player=0)
+        self.assertRaises(AssertionError, b2.place, row=4, col=1, player=1)
+        self.assertRaises(AssertionError, b2.place, row=1, col=-1, player=1)
+        self.assertRaises(AssertionError, b2.place, row=1, col=4, player=1)
         b4 = Board(4)
-        b4.place(row=0, col=0, player=0)
-        self.assertEqual('|[w][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        b4.place(row=0, col=2, player=0)
+        self.assertEqual('|[_][_][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
         b4.place(row=0, col=1, player=1)
-        self.assertEqual('|[w][b][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
-        self.assertRaises(AssertionError, b4.place, 0, 0, 0)
-        self.assertRaises(AssertionError, b4.place, 0, 0, 1)
-        self.assertRaises(AssertionError, b4.place, 0, 1, 0)
-        self.assertRaises(AssertionError, b4.place, 0, 1, 1)
+        self.assertEqual('|[_][b][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
+        self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
+        self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
+        self.assertRaises(AssertionError, b4.place, row=0, col=1, player=1)
 
     def test_getLegal(self):
         """TODO"""
@@ -89,6 +89,20 @@ class TestBoard(unittest.TestCase):
         legalblack.add((5, 4))
         legalblack.add((4, 5))
         self.assertEqual(legalblack, b.getLegal(player=1))
+
+        b.layout[4][4].color = None
+        b.layout[3][3].color = None
+        b.layout[3][4].color = None
+        b.layout[4][3].color = None
+
+        b.layout[4][4].occupied = False
+        b.layout[3][3].occupied = False
+        b.layout[3][4].occupied = False
+        b.layout[4][3].occupied = False
+
+        empty = set()
+        self.assertEqual(empty, b.getLegal(player=0))
+        self.assertEqual(empty, b.getLegal(player=1))
 
 # To Run tests from the editor/PyCharm
 if __name__ == '__main__':

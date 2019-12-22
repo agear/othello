@@ -15,7 +15,7 @@ class Board:
                 tile = Tile()
                 row.append(tile)
         # Set starting tiles
-        self.layout[self.dimensions//2][self.dimensions//2].place(0)
+        self.layout[self.dimensions // 2][self.dimensions // 2].place(0)
         self.layout[(self.dimensions // 2) -1][(self.dimensions // 2) -1].place(0)
         self.layout[(self.dimensions // 2) -1][self.dimensions // 2].place(1)
         self.layout[(self.dimensions // 2)][(self.dimensions // 2) - 1].place(1)
@@ -28,11 +28,25 @@ class Board:
 
     def place(self, row, col, player):
         """TODO"""
+        if player is 0: enemy = 1
+        elif player is 1: enemy = 0
+
         assert 0 <= row < self.dimensions
         assert 0 <= col < self.dimensions
         assert not self.layout[row][col].occupied
+        assert (row, col) in self.getLegal(player)
 
         self.layout[row][col].place(player)
+
+        self.updateLayout()
+
+        if not bool(self.getLegal(enemy)):
+            self.gameover = True
+            print("Game over!")
+
+    def updateLayout(self):
+        """TODO"""
+        pass
 
     def getLegal(self, player):
         """TODO"""
@@ -42,38 +56,33 @@ class Board:
         legal = set()
         for row in range(self.dimensions - 1):
             for col in range(self.dimensions - 1):
-                if self.layout[row + 1][col].color == enemy and not self.layout[row][col].occupied:
-                    if self.checkVertical(direction="south", row=row + 1, col=col, player=player):
-                        legal.add((row, col))
+                if not self.layout[row][col].occupied:
+                    # Vertical
+                    if self.layout[row + 1][col].color == enemy:
+                        if self.checkVertical(direction="south", row=row + 1, col=col, player=player):
+                            legal.add((row, col))
 
-                if self.layout[row - 1][col].color == enemy and not self.layout[row][col].occupied:
-                    if self.checkVertical(direction="north", row=row - 1, col=col, player=player):
-                        legal.add((row, col))
+                    if self.layout[row - 1][col].color == enemy:
+                        if self.checkVertical(direction="north", row=row - 1, col=col, player=player):
+                            legal.add((row, col))
 
-                if self.layout[row][col + 1].color == enemy and not self.layout[row][col].occupied:
-                    if self.checkHorizontal(direction="east", row=row, col=col + 1, player=player):
-                        legal.add((row, col))
+                    # Horizontal
+                    if self.layout[row][col + 1].color == enemy:
+                        if self.checkHorizontal(direction="east", row=row, col=col + 1, player=player):
+                            legal.add((row, col))
 
-                if self.layout[row][col - 1].color == enemy and not self.layout[row][col].occupied:
-                    # print("Checking West!")
-                    if self.checkHorizontal(direction="west", row=row, col=col - 1, player=player):
-                        legal.add((row, col))
+                    if self.layout[row][col - 1].color == enemy:
+                        # print("Checking West!")
+                        if self.checkHorizontal(direction="west", row=row, col=col - 1, player=player):
+                            legal.add((row, col))
 
-                #Diagonal
-                if self.layout[row + 1][col + 1].color == enemy:
-                    if self.checkDiagonal(direction="", row=row, col=col, player=player):
-                        legal.add((row, col))
+                    # Diagonal
+                    if self.layout[row + 1][col + 1].color == enemy:
+                        if self.checkDiagonal(direction="", row=row, col=col, player=player):
+                            legal.add((row, col))
 
         # print(legal)
         return legal
-
-    # def drawCircle(self, centerRow, centerCol, player):
-    #     if player is 0: enemy = 1
-    #     elif player is 1: enemy = 0
-    #
-    #     square = []
-    #     if self.layout[centerRow][centerCol].color == enemy:
-    #         pass
 
     def checkVertical(self, direction, row, col, player):
         """TODO"""
