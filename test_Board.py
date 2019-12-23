@@ -63,15 +63,34 @@ class TestBoard(unittest.TestCase):
         self.assertRaises(AssertionError, b2.place, row=4, col=1, player=1)
         self.assertRaises(AssertionError, b2.place, row=1, col=-1, player=1)
         self.assertRaises(AssertionError, b2.place, row=1, col=4, player=1)
+
+        # Test each white opening move
         b4 = Board(4)
         b4.place(row=0, col=2, player=0)
-        self.assertEqual('|[_][_][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][w][_]|\n|[_][w][w][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        b4 = Board(4)
+        b4.place(row=2, col=0, player=0)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[w][w][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        b4 = Board(4)
+        b4.place(row=1, col=3, player=0)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][w][w]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        b4 = Board(4)
+        b4.place(row=3, col=1, player=0)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][w][w][_]|\n|[_][w][_][_]|\n', b4.__str__())
+
+        # Test each black opening move
+        b4 = Board(4)
         b4.place(row=0, col=1, player=1)
-        self.assertEqual('|[_][b][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
-        self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
-        self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
-        self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
-        self.assertRaises(AssertionError, b4.place, row=0, col=1, player=1)
+        self.assertEqual('|[_][b][_][_]|\n|[_][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        # b4.place(row=0, col=1, player=1)
+        # self.assertEqual('|[_][b][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
+        # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
+        # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
+        # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=1)
 
     def test_getLegal(self):
         """TODO"""
