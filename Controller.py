@@ -3,7 +3,7 @@ from Board import Board
 class Controller:
     """TODO"""
     def __init__(self):
-        self.board = Board(4)
+        self.board = Board()
 
     def play(self, player):
         """TODO"""

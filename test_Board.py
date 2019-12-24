@@ -83,17 +83,30 @@ class TestBoard(unittest.TestCase):
 
         # Test each black opening move
         b4 = Board(4)
+        b4.place(row=1, col=0, player=1)
+        self.assertEqual('|[_][_][_][_]|\n|[b][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        b4 = Board(4)
         b4.place(row=0, col=1, player=1)
         self.assertEqual('|[_][b][_][_]|\n|[_][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
-        # b4.place(row=0, col=1, player=1)
-        # self.assertEqual('|[_][b][w][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        b4 = Board(4)
+        b4.place(row=3, col=2, player=1)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][_]|\n|[_][_][b][_]|\n', b4.__str__())
+
+        b4 = Board(4)
+        b4.place(row=2, col=3, player=1)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][b]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        # b4 = Board(4)
         # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
         # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
         # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
-        # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=1)
+        # self.assertRaises(AssertionError, b4.place, row=1, col=1, player=1)
 
     def test_getLegal(self):
         """TODO"""
+        # Test correct legal opening moves for white
         b = Board()
         legalwhite = set()
         legalwhite.add((4, 2))
@@ -102,6 +115,7 @@ class TestBoard(unittest.TestCase):
         legalwhite.add((3, 5))
         self.assertEqual(legalwhite, b.getLegal(player=0))
 
+        # Test correct legal opening moves for black
         legalblack = set()
         legalblack.add((3, 2))
         legalblack.add((2, 3))
@@ -109,6 +123,7 @@ class TestBoard(unittest.TestCase):
         legalblack.add((4, 5))
         self.assertEqual(legalblack, b.getLegal(player=1))
 
+        # Test that an empty board has no legal moves
         b.layout[4][4].color = None
         b.layout[3][3].color = None
         b.layout[3][4].color = None
@@ -122,6 +137,74 @@ class TestBoard(unittest.TestCase):
         empty = set()
         self.assertEqual(empty, b.getLegal(player=0))
         self.assertEqual(empty, b.getLegal(player=1))
+
+        # Test diagonals
+
+
+        # Test Northwest
+        b4 = Board(4)
+
+        b4.layout[2][2].flip()
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        # print(b4)
+        legalwhite = set()
+        legalwhite.add((1, 3))
+        legalwhite.add((3, 1))
+        legalwhite.add((3, 3))
+        self.assertEqual(legalwhite, b4.getLegal(player=0))
+        b4.place(row=3, col=3, player=0)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][w]|\n', b4.__str__())
+
+
+        # Test Northeast
+        b4 = Board(4)
+
+        b4.layout[2][1].flip()
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][w][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        # print(b4)
+        legalblack = set()
+        legalblack.add((1, 0))
+        legalblack.add((3, 0))
+        legalblack.add((3, 2))
+        self.assertEqual(legalblack, b4.getLegal(player=1))
+        b4.place(row=3, col=0, player=1)
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[b][_][_][_]|\n', b4.__str__())
+
+
+        # Test Southwest
+        b4 = Board(4)
+
+        b4.layout[1][2].flip()
+        self.assertEqual('|[_][_][_][_]|\n|[_][w][w][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        # print(b4)
+        legalblack = set()
+        legalblack.add((0, 1))
+        legalblack.add((0, 3))
+        legalblack.add((2, 3))
+        self.assertEqual(legalblack, b4.getLegal(player=1))
+        b4.place(row=0, col=3, player=1)
+        self.assertEqual('|[_][_][_][b]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+
+        # Test Southeast
+        b4 = Board(4)
+
+        b4.layout[1][1].flip()
+        self.assertEqual('|[_][_][_][_]|\n|[_][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+        # print(b4)
+        legalwhite = set()
+        legalwhite.add((0, 0))
+        legalwhite.add((0, 2))
+        legalwhite.add((2, 0))
+        self.assertEqual(legalwhite, b4.getLegal(player=0))
+        b4.place(row=0,col=0,player=0)
+        self.assertEqual('|[w][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+
+
 
 # To Run tests from the editor/PyCharm
 if __name__ == '__main__':
