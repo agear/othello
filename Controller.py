@@ -22,10 +22,11 @@ class Controller:
                 row = action[0]
                 col = action[1]
                 try:
-                    self.board.place(row=row, col=col, player=player)
+                    updated = self.board.place(row=row, col=col, player=player)
                     print("Player ", player + 1, " chose row: ", row, " col: ", col)
+                    self.view.draw_tile(row=row, col=col, color=player)
+                    self.update_view(updated)
                     play = False
-                    self.update_view()
                 except:
                     print("Illegal move, try again")
                     legal = self.board.getLegal(player=player)
@@ -39,7 +40,7 @@ class Controller:
         print("Inside Game loop...")
         self.draw_board()
         print("Finished drawing the board...")
-        self.update_view()
+        # self.update_view()
         while not self.board.gameover:
             # print("...")
             if bool(self.board.getLegal(0)):
@@ -86,12 +87,16 @@ class Controller:
         self.view.draw_board()
         print("Finished drawing board...")
 
-    def update_view(self):
+    def update_view(self, updated):
         print("Updating view...")
-        for row in range(self.board.dimensions):
-            for col in range(self.board.dimensions):
-                if self.board.layout[row][col].occupied:
-                    self.view.draw_tile(row=row, col=col, color=self.board.layout[row][col].color)
+        for coordinate in updated:
+            row = coordinate[0]
+            col = coordinate[1]
+            self.view.draw_tile(row=row, col=col, color=self.board.layout[row][col].color)
+        # for row in range(self.board.dimensions):
+        #     for col in range(self.board.dimensions):
+        #         if self.board.layout[row][col].occupied:
+        #             self.view.draw_tile(row=row, col=col, color=self.board.layout[row][col].color)
 
 
 def main():

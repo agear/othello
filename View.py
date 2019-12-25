@@ -59,6 +59,11 @@ class View:
             self.othello.forward(self.square * self.dimensions)
             self.othello.penup()
 
+        # Draw start tiles
+        self.draw_tile(row=3, col=3, color=0)
+        self.draw_tile(row=3, col=4, color=1)
+        self.draw_tile(row=4, col=3, color=1)
+        self.draw_tile(row=4, col=4, color=0)
         print("Returning...")
         # turtle.done()
         return

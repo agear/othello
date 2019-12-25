@@ -41,16 +41,18 @@ class Board:
 
         self.layout[row][col].place(player)
 
-        self.updateLayout(row=row, col=col, player=player)
+        updated = self.updateLayout(row=row, col=col, player=player)
 
         if not bool(self.getLegal(0)) and not bool(self.getLegal(1)):
             self.gameover = True
+        return updated
 
     def updateLayout(self, row, col, player):
         """TODO"""
         if player is 0: enemy = 1
         elif player is 1: enemy = 0
         # print("updating layout...")
+        updated = []
 
         # North
         try:
@@ -60,6 +62,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row,col))
                                 row -= 1
                             except:
                                 break
@@ -76,6 +79,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 row += 1
                             except:
                                 break
@@ -92,6 +96,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col += 1
                             except:
                                 break
@@ -108,6 +113,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col -= 1
                             except:
                                 break
@@ -124,6 +130,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col -= 1
                                 row -= 1
                             except:
@@ -142,6 +149,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col += 1
                                 row -= 1
                             except:
@@ -160,6 +168,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col -= 1
                                 row += 1
                             except:
@@ -178,6 +187,7 @@ class Board:
                         if self.layout[row][col].color == enemy:
                             try:
                                 self.flip(row=row, col=col)
+                                updated.append((row, col))
                                 col += 1
                                 row += 1
                             except:
@@ -187,6 +197,8 @@ class Board:
                             row += 1
         except:
             pass
+        print("updated: ", updated)
+        return updated
 
 
     def getLegal(self, player):
