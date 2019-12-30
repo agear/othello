@@ -7,7 +7,11 @@ class View:
         self.square = square
         self.circle = (square // 2)
         self.size = dimensions
+        self.screen = turtle.Screen()
         self.othello = turtle.Turtle()
+
+    def click(self, x, y):
+        print(x, y)
 
 
     def draw_board(self):
@@ -20,6 +24,7 @@ class View:
         turtle.setup(self.size * self.square + self.square, self.size * self.square + self.square)
         turtle.screensize(self.size * self.square, self.size * self.square)
         turtle.bgcolor('white')
+        # turtle.onscreenclick(self.click)
 
         print("Creating turtle...")
         # Create the turtle to draw the board
