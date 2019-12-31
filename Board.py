@@ -412,8 +412,6 @@ class Tile:
     def __init__(self):
         self.occupied = False
         self.color = None
-        # self.legal_for_white = False
-        # self.legal_for_black = False
 
     def place(self, player: int) -> None:
         """TODO"""

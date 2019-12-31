@@ -226,7 +226,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(empty, b.get_legal(player=0))
         self.assertEqual(empty, b.get_legal(player=1))
 
-        # Test diagonals
+    # Test diagonals
 
         # Test Northwest
         b4 = Board(4)
