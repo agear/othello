@@ -92,23 +92,43 @@ class Controller:
 
     def clickPlay(self, x: int, y: int) -> None:
         """TODO"""
+
+        # Prevent input until after AI plays
+        self.view.screen.onscreenclick(None)
+
         # Player 0 plays x, y if legal
         row = self.translate(-y)
         col = self.translate(x)
         if not self.board.gameover:
             try:
+
                 updated = self.board.place(row=row, col=col, player=0)
+
+
                 self.view.draw_tile(row=row, col=col, color=0)
                 self.update_view(updated)
-                self.view.screen.onscreenclick(None)
+
                 # Computer plays
-                time.sleep(3)
+                # TODO loop if no legal white moves???
+                time.sleep(1)
                 legalAImoves = self.board.get_legal(player=1)
                 random_move = random.choice(tuple(legalAImoves))
                 updated = self.board.place(row=random_move[0], col=random_move[1], player=1)
                 self.view.draw_tile(row=random_move[0], col=random_move[1], color=1)
                 self.update_view(updated)
                 print("White points: {}\nBlack points: {}".format(self.board.white_points, self.board.black_points))
+                if not bool(self.board.get_legal(player=0)):
+                    while not bool(self.board.get_legal(player=0)):
+                        print("No Legal moves for white!")
+                        time.sleep(1)
+                        legalAImoves = self.board.get_legal(player=1)
+                        random_move = random.choice(tuple(legalAImoves))
+                        updated = self.board.place(row=random_move[0], col=random_move[1], player=1)
+                        self.view.draw_tile(row=random_move[0], col=random_move[1], color=1)
+                        self.update_view(updated)
+                        print("White points: {}\nBlack points: {}".format(self.board.white_points,
+                                                                          self.board.black_points))
+                # Return control to player
                 self.view.screen.onscreenclick(self.clickPlay)
                 if self.board.gameover:
                     print("Game over")
@@ -119,6 +139,8 @@ class Controller:
                 print("Illegal move, try again")
                 legal = self.board.get_legal(player=0)
                 print("Legal moves: ", legal)
+                # Return control to player
+                self.view.screen.onscreenclick(self.clickPlay)
 
 
 

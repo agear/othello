@@ -1,5 +1,6 @@
 from typing import List, Set
 
+DIRECTIONS = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"]
 
 class Board:
     """TODO"""
@@ -45,10 +46,10 @@ class Board:
 
     def place(self, row: int, col: int, player: int) -> List[tuple]:
         """TODO"""
-        if player is 0:
-            enemy = 1
-        elif player is 1:
-            enemy = 0
+        # if player is 0:
+        #     enemy = 1
+        # elif player is 1:
+        #     enemy = 0
 
         assert (row, col) in self.get_legal(player)
 
@@ -56,8 +57,28 @@ class Board:
 
         updated = self.updateLayout(row=row, col=col, player=player)
 
-        if not bool(self.get_legal(0)) and not bool(self.get_legal(1)):
+        if not bool(self.get_legal(player=0)) and not bool(self.get_legal(player=1)):
             self.gameover = True
+        return updated
+
+    def direction(self, f1, f2, row, col, f3, enemy, f4):
+        updated = []
+        try:
+            if f1:
+                if f2:
+                    while f3:
+                        if self.layout[row][col].color == enemy:
+                            try:
+                                self.flip(row=row, col=col)
+                                updated.append((row, col))
+                                f4
+                            except:
+                                break
+                        else:
+                            f4
+        except:
+            pass
+
         return updated
 
     def updateLayout(self, row: int, col: int, player: int) -> List[tuple]:
@@ -70,10 +91,18 @@ class Board:
 
         updated = []
 
+        #???
+        # self.direction(f1= lambda row, col : self.layout[row - 1][col].color == enemy,
+        #                f2= self.check_vertical(direction="north", row=row - 1, col=col, player=player),
+        #                row= row-1,
+        #                col= col,
+        #                f3= lambda row : row > 0,
+        #                enemy=enemy,
+        #                f4=lambda row : row - 1)
         # North
         try:
             if self.layout[row - 1][col].color == enemy:
-                if self.check_vertical(direction="north", row=row - 1, col=col, player=player):
+                if self.check_direction(direction="north", row=row - 1, col=col, player=player):
                     while row > 0:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -81,6 +110,8 @@ class Board:
                                 updated.append((row, col))
                                 row -= 1
                             except:
+                                # To break out of while loop ???
+                                row = -1
                                 break
                         else:
                             row -= 1
@@ -90,7 +121,7 @@ class Board:
         # South
         try:
             if self.layout[row + 1][col].color == enemy:
-                if self.check_vertical(direction="south", row=row + 1, col=col, player=player):
+                if self.check_direction(direction="south", row=row + 1, col=col, player=player):
                     while row < self.dimensions:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -98,6 +129,7 @@ class Board:
                                 updated.append((row, col))
                                 row += 1
                             except:
+                                row = self.dimensions + 1
                                 break
                         else:
                             row += 1
@@ -107,7 +139,7 @@ class Board:
         # East
         try:
             if self.layout[row][col + 1].color == enemy:
-                if self.check_horizontal(direction="east", row=row, col=col + 1, player=player):
+                if self.check_direction(direction="east", row=row, col=col + 1, player=player):
                     while col < self.dimensions:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -115,6 +147,7 @@ class Board:
                                 updated.append((row, col))
                                 col += 1
                             except:
+                                col = self.dimensions + 1
                                 break
                         else:
                             col += 1
@@ -124,7 +157,7 @@ class Board:
         # West
         try:
             if self.layout[row][col - 1].color == enemy:
-                if self.check_horizontal(direction="west", row=row, col=col - 1, player=player):
+                if self.check_direction(direction="west", row=row, col=col - 1, player=player):
                     while col > 0:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -132,6 +165,7 @@ class Board:
                                 updated.append((row, col))
                                 col -= 1
                             except:
+                                col = -1
                                 break
                         else:
                             col -= 1
@@ -141,7 +175,7 @@ class Board:
         # Northwest
         try:
             if self.layout[row - 1][col - 1].color == enemy:
-                if self.check_diagonal(direction="northwest", row=row - 1, col=col - 1, player=player):
+                if self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player):
                     while row > 0 and col > 0:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -150,6 +184,8 @@ class Board:
                                 col -= 1
                                 row -= 1
                             except:
+                                col = -1
+                                row = -1
                                 break
                         else:
                             col -= 1
@@ -160,7 +196,7 @@ class Board:
         # Northeast
         try:
             if self.layout[row - 1][col + 1].color == enemy:
-                if self.check_diagonal(direction="northeast", row=row - 1, col=col + 1, player=player):
+                if self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player):
                     while row > 0 and col < self.dimensions:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -169,6 +205,8 @@ class Board:
                                 col += 1
                                 row -= 1
                             except:
+                                col = self.dimensions + 1
+                                row = -1
                                 break
                         else:
                             col += 1
@@ -179,7 +217,7 @@ class Board:
         # Southwest
         try:
             if self.layout[row + 1][col - 1].color == enemy:
-                if self.check_diagonal(direction="southwest", row=row + 1, col=col - 1, player=player):
+                if self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player):
                     while row < self.dimensions and col > 0:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -188,6 +226,8 @@ class Board:
                                 col -= 1
                                 row += 1
                             except:
+                                col = -1
+                                row = self.dimensions + 1
                                 break
                         else:
                             col -= 1
@@ -198,7 +238,7 @@ class Board:
         # Southeast
         try:
             if self.layout[row + 1][col + 1].color == enemy:
-                if self.check_diagonal(direction="southeast", row=row + 1, col=col + 1, player=player):
+                if self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player):
                     while row < self.dimensions and col < self.dimensions:
                         if self.layout[row][col].color == enemy:
                             try:
@@ -207,6 +247,8 @@ class Board:
                                 col += 1
                                 row += 1
                             except:
+                                col = self.dimensions + 1
+                                row = self.dimensions + 1
                                 break
                         else:
                             col += 1
@@ -232,14 +274,14 @@ class Board:
                     # Vertical
                     try:
                         if self.layout[row - 1][col].color == enemy:
-                            if self.check_vertical(direction="north", row=row - 1, col=col, player=player):
+                            if self.check_direction(direction="north", row=row - 1, col=col, player=player):
                                 legal.add((row, col))
                     except:
                         pass
 
                     try:
                         if self.layout[row + 1][col].color == enemy:
-                            if self.check_vertical(direction="south", row=row + 1, col=col, player=player):
+                            if self.check_direction(direction="south", row=row + 1, col=col, player=player):
                                 legal.add((row, col))
                     except:
                         pass
@@ -247,40 +289,40 @@ class Board:
                     # Horizontal
                     try:
                         if self.layout[row][col + 1].color == enemy:
-                            if self.check_horizontal(direction="east", row=row, col=col + 1, player=player):
+                            if self.check_direction(direction="east", row=row, col=col + 1, player=player):
                                 legal.add((row, col))
                     except:
                         pass
 
                     if self.layout[row][col - 1].color == enemy:
-                        if self.check_horizontal(direction="west", row=row, col=col - 1, player=player):
+                        if self.check_direction(direction="west", row=row, col=col - 1, player=player):
                             legal.add((row, col))
 
                     # Diagonal
                     try:
                         if self.layout[row - 1][col + 1].color == enemy:
-                            if self.check_diagonal(direction="northeast", row=row - 1, col=col + 1, player=player):
+                            if self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player):
                                 legal.add((row, col))
                     except:
                         pass
 
                     try:
                         if self.layout[row - 1][col - 1].color == enemy:
-                            if self.check_diagonal(direction="northwest", row=row - 1, col=col - 1, player=player):
+                            if self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player):
                                 legal.add((row, col))
                     except:
                         pass
 
                     try:
                         if self.layout[row + 1][col + 1].color == enemy:
-                            if self.check_diagonal(direction="southeast", row=row + 1, col=col + 1, player=player):
+                            if self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player):
                                 legal.add((row, col))
                     except:
                         pass
 
                     try:
                         if self.layout[row + 1][col - 1].color == enemy:
-                            if self.check_diagonal(direction="southwest", row=row + 1, col=col - 1, player=player):
+                            if self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player):
                                 legal.add((row, col))
                     except:
                         pass
@@ -288,111 +330,157 @@ class Board:
         # print(legal)
         return legal
 
-    def check_vertical(self, direction: str, row: int, col: int, player: int) -> bool:
+    # def check_vertical(self, direction: str, row: int, col: int, player: int) -> bool:
+    #     """ Checks if a given coordinate is a legal move for the given player by checking either north or south """
+    #     assert direction == "north" or direction == "south"
+    #
+    #     if direction is "north":
+    #         end = 0
+    #         step = -1
+    #     elif direction is "south":
+    #         end = self.dimensions
+    #         step = 1
+    #
+    #     for checkrow in range(row, end, step):
+    #         if self.layout[checkrow][col].color == player:
+    #             return True
+    #         elif not self.layout[checkrow][col].occupied:
+    #             return False
+    #         else:
+    #             continue
+    #     return False
+
+    def check_direction(self, direction: str, row: int, col: int, player: int) -> bool:
         """TODO"""
-        assert direction == "north" or direction == "south"
+
+        assert direction in DIRECTIONS
+
+        increment = lambda x: x + 1
+        decrement = lambda x: x - 1
+        static = lambda x: x
 
         if direction is "north":
-            # print("checking north")
-            for checkrow in range(row, 0, -1):
-                if self.layout[checkrow][col].color == player:
-                    # print("Returning true from north")
-                    return True
-                elif not self.layout[checkrow][col].occupied:
-                    return False
-            return False
+            condition1 = row > 0
+            condition2 = True
+            update_row = decrement
+            update_col = static
 
-        elif direction is "south":
-            # print("checking south")
-            for checkrow in range(row, self.dimensions, 1):
-                if self.layout[checkrow][col].color == player:
-                    # print("Returning true from south")
-                    return True
-                elif not self.layout[checkrow][col].occupied:
-                    return False
-            return False
+        elif direction is "northeast":
+            condition1 = row > 0
+            condition2 = col < self.dimensions
+            update_row = decrement
+            update_col = increment
 
-    def check_diagonal(self, direction: str, row: int, col: int, player: int) -> bool:
-        """TODO"""
-        assert direction == "northeast" \
-               or direction == "northwest" \
-               or direction == "southeast" \
-               or direction == "southwest"
-
-        if direction is "northeast":
-            while row > 0 and col < self.dimensions:
-                # print("Checking {}, {}".format(row, col))
-                if self.layout[row][col].color == player:
-                    # print("{}, {} is occupied by player".format(row, col))
-                    return True
-                elif not self.layout[row][col].occupied:
-                    return False
-                else:
-                    row -= 1
-                    col += 1
-            return False
-
-        elif direction is "northwest":
-            while row > 0 and col > 0:
-                # print("Checking {}, {}".format(row, col))
-                if self.layout[row][col].color == player:
-                    # print("{}, {} is occupied by player".format(row, col))
-                    return True
-                elif not self.layout[row][col].occupied:
-                    return False
-                else:
-                    row -= 1
-                    col -= 1
-            return False
+        elif direction is "east":
+            condition1 = col < self.dimensions
+            condition2 = True
+            update_row = static
+            update_col = increment
 
         elif direction is "southeast":
-            while row < self.dimensions and col < self.dimensions:
-                # print("Checking {}, {}".format(row, col))
-                if self.layout[row][col].color == player:
-                    # print("{}, {} is occupied by player".format(row, col))
-                    return True
-                elif not self.layout[row][col].occupied:
-                    return False
-                else:
-                    row += 1
-                    col += 1
-            return False
+            condition1 = row < self.dimensions
+            condition2 = col < self.dimensions
+            update_row = increment
+            update_col = increment
+
+        elif direction is "south":
+            condition1 = row < self.dimensions
+            condition2 = True
+            update_row = increment
+            update_col = static
 
         elif direction is "southwest":
-            while row < self.dimensions and col > 0:
-                # print("Checking {}, {}".format(row, col))
-                if self.layout[row][col].color == player:
-                    # print("{}, {} is occupied by player".format(row, col))
-                    return True
-                elif not self.layout[row][col].occupied:
-                    return False
-                else:
-                    row += 1
-                    col -= 1
-            return False
-
-    def check_horizontal(self, direction: str, row: int, col: int, player: int) -> bool:
-        assert direction == "east" or direction == "west"
-
-        if direction is "east":
-            # print("checking east")
-            for checkCol in range(col, self.dimensions, 1):
-                if self.layout[row][checkCol].color == player:
-                    # print("Returning true from east")
-                    return True
-                elif not self.layout[row][checkCol].occupied:
-                    return False
-            return False
+            condition1 = row < self.dimensions
+            condition2 = col > 0
+            update_row = increment
+            update_col = decrement
 
         elif direction is "west":
-            # print("checking west")
-            for checkCol in range(col, 0, -1):
-                if self.layout[row][checkCol].color == player:
-                    # print("Returning true from west")
-                    return True
-                elif not self.layout[row][checkCol].occupied:
-                    return False
-            return False
+            condition1 = col > 0
+            condition2 = True
+            update_row = static
+            update_col = decrement
+
+        elif direction is "northwest":
+            condition1 = row > 0
+            condition2 = col > 0
+            update_row = decrement
+            update_col = decrement
+
+        # if direction is "northeast":
+        #     while condition1 and condition2:
+        #         if self.layout[row][col].color == player:
+        #             return True
+        #         elif not self.layout[row][col].occupied:
+        #             return False
+        #         else:
+        #             row = a(row)
+        #             col = b(col)
+        #     return False
+        #
+        # elif direction is "northwest":
+        #     while condition1 and condition2:
+        #         if self.layout[row][col].color == player:
+        #             return True
+        #         elif not self.layout[row][col].occupied:
+        #             return False
+        #         else:
+        #             row -= 1
+        #             col -= 1
+        #     return False
+        #
+        # elif direction is "southeast":
+        #     while condition1 and condition2:
+        #         if self.layout[row][col].color == player:
+        #             return True
+        #         elif not self.layout[row][col].occupied:
+        #             return False
+        #         else:
+        #             row += 1
+        #             col += 1
+        #     return False
+        #
+        # elif direction is "southwest":
+        #     while condition1 and condition2:
+        #         if self.layout[row][col].color == player:
+        #             return True
+        #         elif not self.layout[row][col].occupied:
+        #             return False
+        #         else:
+        #             row += 1
+        #             col -= 1
+        #     return False
+
+        while condition1 and condition2:
+            if self.layout[row][col].color == player:
+                return True
+            elif not self.layout[row][col].occupied:
+                break
+                return False
+            else:
+                row = update_row(row)
+                col = update_col(col)
+        return False
+
+    # def check_horizontal(self, direction: str, row: int, col: int, player: int) -> bool:
+    #     """TODO"""
+    #     assert direction == "east" or direction == "west"
+    #
+    #     if direction is "east":
+    #         end = self.dimensions
+    #         step = 1
+    #     elif direction is "west":
+    #         end = 0
+    #         step = -1
+    #
+    #     for checkCol in range(col, end, step):
+    #         if self.layout[row][checkCol].color == player:
+    #             return True
+    #         elif not self.layout[row][checkCol].occupied:
+    #             return False
+    #         else:
+    #             continue
+    #     return False
 
     def __str__(self):
         strRep = ''

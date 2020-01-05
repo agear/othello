@@ -28,15 +28,24 @@ class TestBoard(unittest.TestCase):
     def test_BoardStr(self):
         """TODO"""
         b2 = Board(dimensions=2)
-        self.assertEqual('|[w][b]|\n|[b][w]|\n', b2.__str__())
+        self.assertEqual('|[w][b]|\n'
+                         '|[b][w]|\n', b2.__str__())
         # Board dimensions must be divisible by 2
         self.assertRaises(AssertionError, Board, dimensions=3 )
         b4 = Board(dimensions=4)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
         b8 = Board(dimensions=8)
-        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_]' \
-                         '[_][w][b][_][_][_]|\n|[_][_][_][b][w][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n' \
-                         '|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][w][b][_][_][_]|\n'
+                         '|[_][_][_][b][w][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
 
 
     def test_flip(self):
@@ -52,7 +61,8 @@ class TestBoard(unittest.TestCase):
         b2.flip(row=0, col=1)
         b2.flip(row=1, col=0)
         b2.flip(row=1, col=1)
-        self.assertEqual('|[b][w]|\n|[w][b]|\n', b2.__str__())
+        self.assertEqual('|[b][w]|\n'
+                         '|[w][b]|\n', b2.__str__())
 
     def test_place(self):
         """TODO"""
@@ -67,36 +77,60 @@ class TestBoard(unittest.TestCase):
         # Test each white opening move
         b4 = Board(4)
         b4.place(row=0, col=2, player=0)
-        self.assertEqual('|[_][_][w][_]|\n|[_][w][w][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][w][_]|\n'
+                         '|[_][w][w][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=2, col=0, player=0)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[w][w][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[w][w][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=1, col=3, player=0)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][w][w]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][w][w]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=3, col=1, player=0)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][w][w][_]|\n|[_][w][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][w][w][_]|\n'
+                         '|[_][w][_][_]|\n', b4.__str__())
 
         # Test each black opening move
         b4 = Board(4)
         b4.place(row=1, col=0, player=1)
-        self.assertEqual('|[_][_][_][_]|\n|[b][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[b][b][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=0, col=1, player=1)
-        self.assertEqual('|[_][b][_][_]|\n|[_][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][b][_][_]|\n'
+                         '|[_][b][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=3, col=2, player=1)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][_]|\n|[_][_][b][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][b][_]|\n'
+                         '|[_][_][b][_]|\n', b4.__str__())
 
         b4 = Board(4)
         b4.place(row=2, col=3, player=1)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][b]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][b][b]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         # Set up an empty board
         b8 = Board()
@@ -110,7 +144,14 @@ class TestBoard(unittest.TestCase):
         b8.layout[3][3].occupied = False
         b8.layout[3][4].occupied = False
         b8.layout[4][3].occupied = False
-        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
 
 
         b8.layout[0][0].color = 0
@@ -134,7 +175,14 @@ class TestBoard(unittest.TestCase):
         b8.layout[7][7].color = 1
         b8.layout[7][7].occupied = True
 
-        self.assertEqual('|[w][_][_][_][_][_][_][_]|\n|[_][b][_][_][_][_][_][_]|\n|[_][_][b][_][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][_][b][_][_][_]|\n|[_][_][_][_][_][w][_][_]|\n|[_][_][_][_][_][_][b][_]|\n|[_][_][_][_][_][_][_][b]|\n', b8.__str__())
+        self.assertEqual('|[w][_][_][_][_][_][_][_]|\n'
+                         '|[_][b][_][_][_][_][_][_]|\n'
+                         '|[_][_][b][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][b][_][_][_]|\n'
+                         '|[_][_][_][_][_][w][_][_]|\n'
+                         '|[_][_][_][_][_][_][b][_]|\n'
+                         '|[_][_][_][_][_][_][_][b]|\n', b8.__str__())
 
         b8.layout[0][3].color = 0
         b8.layout[0][3].occupied = True
@@ -157,7 +205,14 @@ class TestBoard(unittest.TestCase):
         b8.layout[7][3].color = 1
         b8.layout[7][3].occupied = True
 
-        self.assertEqual('|[w][_][_][w][_][_][_][_]|\n|[_][b][_][b][_][_][_][_]|\n|[_][_][b][b][_][_][_][_]|\n|[_][_][_][_][_][_][_][_]|\n|[_][_][_][b][b][_][_][_]|\n|[_][_][_][w][_][w][_][_]|\n|[_][_][_][b][_][_][b][_]|\n|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
+        self.assertEqual('|[w][_][_][w][_][_][_][_]|\n'
+                         '|[_][b][_][b][_][_][_][_]|\n'
+                         '|[_][_][b][b][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][b][b][_][_][_]|\n'
+                         '|[_][_][_][w][_][w][_][_]|\n'
+                         '|[_][_][_][b][_][_][b][_]|\n'
+                         '|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
 
         b8.layout[3][0].color = 0
         b8.layout[3][0].occupied = True
@@ -181,7 +236,14 @@ class TestBoard(unittest.TestCase):
         b8.layout[3][7].occupied = True
 
         print("\n", b8)
-        self.assertEqual('|[w][_][_][w][_][_][_][_]|\n|[_][b][_][b][_][_][_][_]|\n|[_][_][b][b][_][_][_][_]|\n|[w][b][b][_][b][w][b][b]|\n|[_][_][_][b][b][_][_][_]|\n|[_][_][_][w][_][w][_][_]|\n|[_][_][_][b][_][_][b][_]|\n|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
+        self.assertEqual('|[w][_][_][w][_][_][_][_]|\n'
+                         '|[_][b][_][b][_][_][_][_]|\n'
+                         '|[_][_][b][b][_][_][_][_]|\n'
+                         '|[w][b][b][_][b][w][b][b]|\n'
+                         '|[_][_][_][b][b][_][_][_]|\n'
+                         '|[_][_][_][w][_][w][_][_]|\n'
+                         '|[_][_][_][b][_][_][b][_]|\n'
+                         '|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
 
         b8.place(row=3, col=3, player=0)
         print("\n", b8)
@@ -232,7 +294,10 @@ class TestBoard(unittest.TestCase):
         b4 = Board(4)
 
         b4.layout[2][2].flip()
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][b][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][b][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         legalwhite = set()
         legalwhite.add((1, 3))
@@ -240,14 +305,20 @@ class TestBoard(unittest.TestCase):
         legalwhite.add((3, 3))
         self.assertEqual(legalwhite, b4.get_legal(player=0))
         b4.place(row=3, col=3, player=0)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][w]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][w]|\n', b4.__str__())
 
 
         # Test Northeast
         b4 = Board(4)
 
         b4.layout[2][1].flip()
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][w][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][w][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         legalblack = set()
         legalblack.add((1, 0))
@@ -255,14 +326,20 @@ class TestBoard(unittest.TestCase):
         legalblack.add((3, 2))
         self.assertEqual(legalblack, b4.get_legal(player=1))
         b4.place(row=3, col=0, player=1)
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[b][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[b][_][_][_]|\n', b4.__str__())
 
 
         # Test Southwest
         b4 = Board(4)
 
         b4.layout[1][2].flip()
-        self.assertEqual('|[_][_][_][_]|\n|[_][w][w][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][w][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         legalblack = set()
         legalblack.add((0, 1))
@@ -270,14 +347,20 @@ class TestBoard(unittest.TestCase):
         legalblack.add((2, 3))
         self.assertEqual(legalblack, b4.get_legal(player=1))
         b4.place(row=0, col=3, player=1)
-        self.assertEqual('|[_][_][_][b]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][b]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
 
         # Test Southeast
         b4 = Board(4)
 
         b4.layout[1][1].flip()
-        self.assertEqual('|[_][_][_][_]|\n|[_][b][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][b][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
         legalwhite = set()
         legalwhite.add((0, 0))
@@ -285,7 +368,10 @@ class TestBoard(unittest.TestCase):
         legalwhite.add((2, 0))
         self.assertEqual(legalwhite, b4.get_legal(player=0))
         b4.place(row=0,col=0,player=0)
-        self.assertEqual('|[w][_][_][_]|\n|[_][w][b][_]|\n|[_][b][w][_]|\n|[_][_][_][_]|\n', b4.__str__())
+        self.assertEqual('|[w][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
 
 
 
