@@ -1,4 +1,4 @@
-from typing import List, Set
+from typing import List, Set, Callable
 
 DIRECTIONS = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"]
 
@@ -28,6 +28,7 @@ class Board:
         self.layout[(self.dimensions // 2) - 1][self.dimensions // 2].place(1)
         self.layout[(self.dimensions // 2)][(self.dimensions // 2) - 1].place(1)
 
+
     def update_points(self) -> None:
         """TODO"""
         self.white_points, self.black_points = 0, 0
@@ -38,18 +39,16 @@ class Board:
                 elif self.layout[row][col].color == 1:
                     self.black_points += 1
 
+
     def flip(self, row: int, col: int) -> None:
         """TODO"""
         assert 0 <= row < self.dimensions
         assert 0 <= col < self.dimensions
         self.layout[row][col].flip()
 
+
     def place(self, row: int, col: int, player: int) -> List[tuple]:
         """TODO"""
-        # if player is 0:
-        #     enemy = 1
-        # elif player is 1:
-        #     enemy = 0
 
         assert (row, col) in self.get_legal(player)
 
@@ -61,25 +60,6 @@ class Board:
             self.gameover = True
         return updated
 
-    def direction(self, f1, f2, row, col, f3, enemy, f4):
-        updated = []
-        try:
-            if f1:
-                if f2:
-                    while f3:
-                        if self.layout[row][col].color == enemy:
-                            try:
-                                self.flip(row=row, col=col)
-                                updated.append((row, col))
-                                f4
-                            except:
-                                break
-                        else:
-                            f4
-        except:
-            pass
-
-        return updated
 
     def updateLayout(self, row: int, col: int, player: int) -> List[tuple]:
         """TODO"""
@@ -170,7 +150,6 @@ class Board:
         except:
             pass
 
-        ### HEREE!!!!!
         # Southwest
         try:
             condition1 = self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player)
@@ -220,20 +199,19 @@ class Board:
 
         return updated
 
-    def get_updates(self, row, col, enemy, condition1, condition2, condition3, update_row, update_col, updated):
+    def get_updates(self, row: int, col: int, enemy: int, condition1: bool, condition2: bool, condition3: bool,
+                    update_row: Callable[[int], int], update_col: Callable[[int],int],
+                    updated: List[tuple]) -> List[tuple]:
         """TODO"""
         urow = row
         ucol = col
         if condition1:  # Check if the move is legal
             while condition2 and condition3: # Check that we haven't gone outside the boundary
                 if self.layout[urow][ucol].color == enemy:
-                    # try:
                     self.flip(row=urow, col=ucol)
                     updated.append((urow, ucol))
                     urow = update_row(urow)
                     ucol = update_col(ucol)
-                    # except:
-                    #     break
                 elif not self.layout[urow][ucol].occupied:
                     break
                 elif self.layout[urow][ucol] != enemy and (urow != row or ucol != col):

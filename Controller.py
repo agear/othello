@@ -74,10 +74,14 @@ class Controller:
 
     def update_view(self, updated: List[tuple]) -> None:
         """TODO"""
+        self.view.erase_previous_legal()
+
         for coordinate in updated:
             row = coordinate[0]
             col = coordinate[1]
             self.view.draw_tile(row=row, col=col, color=self.board.layout[row][col].color)
+
+        self.view.draw_all_legal(self.board.get_legal(player=0))
 
 
     def translate(self, x: float) -> int:
@@ -107,6 +111,11 @@ class Controller:
 
                 self.view.draw_tile(row=row, col=col, color=0)
                 self.update_view(updated)
+                if self.board.gameover:
+                    print("Game over")
+                    self.getWinner()
+                    time.sleep(5)
+                    turtle.bye()
 
                 # Computer plays
                 # TODO loop if no legal white moves???
@@ -128,6 +137,11 @@ class Controller:
                         self.update_view(updated)
                         print("White points: {}\nBlack points: {}".format(self.board.white_points,
                                                                           self.board.black_points))
+                        if self.board.gameover:
+                            print("Game over")
+                            self.getWinner()
+                            time.sleep(5)
+                            turtle.bye()
                 # Return control to player
                 self.view.screen.onscreenclick(self.clickPlay)
                 if self.board.gameover:
@@ -135,10 +149,17 @@ class Controller:
                     self.getWinner()
                     time.sleep(5)
                     turtle.bye()
+
+                # Draw players legal moves
+                # legal_player_moves = self.board.get_legal(player=0)
+                # print("LEGAL: ", legal_player_moves)
+                # self.view.draw_all_legal(legal=legal_player_moves)
+
             except:
                 print("Illegal move, try again")
                 legal = self.board.get_legal(player=0)
                 print("Legal moves: ", legal)
+
                 # Return control to player
                 self.view.screen.onscreenclick(self.clickPlay)
 

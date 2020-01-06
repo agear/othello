@@ -1,4 +1,5 @@
 import turtle
+from typing import Set
 
 class View:
 
@@ -9,7 +10,14 @@ class View:
         self.size = dimensions
         self.screen = turtle.Screen()
         self.othello = turtle.Turtle()
+        self.legal = turtle.Turtle()
+        self.last_legal_moves = []
 
+        self.legal.speed(0)
+        self.legal.hideturtle()
+
+        corner = -self.dimensions * self.square / 2
+        self.legal.setposition(corner, corner)
 
     def draw_board(self) -> None:
         ''' Function: draw_board
@@ -81,4 +89,49 @@ class View:
         self.othello.circle(self.circle)
         self.othello.end_fill()
 
+    def draw_all_legal(self, legal: Set[tuple]) -> None:
+        # Draw new legal moves
+        for move in legal:
+            self.draw_legal(row=move[0], col=move[1])
 
+        # Reset previous legal moves
+        self.last_legal_moves = legal
+
+    def draw_legal(self, row: int, col: int) -> None:
+        """TODO"""
+        # if color == 0: color = "white"
+        # elif color == 1: color = "black"
+
+        row = -(row - 3)
+        col = col - 3
+        y = row * self.square
+        x = col * self.square - (self.square/2)
+
+
+        self.legal.penup()
+        self.legal.goto(x, y)
+        self.legal.pendown()
+        self.legal.color("brown", "forest green")
+        self.legal.begin_fill()
+        self.legal.circle(self.circle)
+        self.legal.end_fill()
+
+    def erase_previous_legal(self) -> None:
+        self.legal.clear()
+
+
+
+    # def erase_legal(self, row: int, col: int) -> None:
+    #     row = -(row - 3)
+    #     col = col - 3
+    #     y = row * self.square + (self.square/2)
+    #     x = col * self.square
+    #
+    #
+    #     self.othello.penup()
+    #     self.othello.goto(x, y)
+    #     self.othello.pendown()
+    #     self.othello.color("forest green", "forest green")
+    #     self.othello.begin_fill()
+    #     self.othello.circle(self.circle-5)
+    #     self.othello.end_fill()
