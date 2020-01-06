@@ -247,7 +247,14 @@ class TestBoard(unittest.TestCase):
 
         b8.place(row=3, col=3, player=0)
         print("\n", b8)
-        # self.assertEqual('|[w][_][_][w][_][_][_][_]|\n|[_][w][_][w][_][_][_][_]|\n|[_][_][w][w][_][_][_][_]|\n|[w][w][w][w][w][w][b][b]|\n|[_][_][_][w][w][_][_][_]|\n|[_][_][_][w][_][w][_][_]|\n|[_][_][_][b][_][_][b][_]|\n|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
+        self.assertEqual('|[w][_][_][w][_][_][_][_]|\n'
+                         '|[_][w][_][w][_][_][_][_]|\n'
+                         '|[_][_][w][w][_][_][_][_]|\n'
+                         '|[w][w][w][w][w][w][b][b]|\n'
+                         '|[_][_][_][w][w][_][_][_]|\n'
+                         '|[_][_][_][w][_][w][_][_]|\n'
+                         '|[_][_][_][b][_][_][b][_]|\n'
+                         '|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
 
         # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
         # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)

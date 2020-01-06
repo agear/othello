@@ -97,129 +97,122 @@ class Board:
 
         # North
         try:
-            condition1 = self.layout[row - 1][col].color == enemy
-            condition2 = self.check_direction(direction="north", row=row - 1, col=col, player=player)
-            condition3 = row > 0
-            condition4 = True
+            condition1 = self.check_direction(direction="north", row=row - 1, col=col, player=player)
+            condition2 = row > 0
+            condition3 = True
 
             update_row = decrement
             update_col = static
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # Northeast
         try:
-            condition1 = self.layout[row - 1][col + 1].color == enemy
-            condition2 = self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player)
-            condition3 = row > 0
-            condition4 = col < self.dimensions
+            condition1 = self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player)
+            condition2 = row > 0
+            condition3 = col < self.dimensions
 
             update_row = decrement
             update_col = increment
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # East
         try:
-            condition1 = self.layout[row][col + 1].color == enemy
-            condition2 = self.check_direction(direction="east", row=row, col=col + 1, player=player)
-            condition3 = col < self.dimensions
-            condition4 = True
+            condition1 = self.check_direction(direction="east", row=row, col=col + 1, player=player)
+            condition2 = col < self.dimensions
+            condition3 = True
 
             update_row = static
             update_col = increment
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # Southeast
         try:
-            condition1 = self.layout[row + 1][col + 1].color == enemy
-            condition2 = self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player)
-            condition3 = row < self.dimensions
-            condition4 = col < self.dimensions
+            condition1 = self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player)
+            condition2 = row < self.dimensions
+            condition3 = col < self.dimensions
 
             update_row = increment
             update_col = increment
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # South
         try:
-            condition1 = self.layout[row + 1][col].color == enemy
-            condition2 = self.check_direction(direction="south", row=row + 1, col=col, player=player)
-            condition3 = row < self.dimensions
-            condition4 = True
+            condition1 = self.check_direction(direction="south", row=row + 1, col=col, player=player)
+            condition2 = row < self.dimensions
+            condition3 = True
 
             update_row = increment
             update_col = static
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
+        ### HEREE!!!!!
         # Southwest
         try:
-            condition1 = self.layout[row + 1][col - 1].color == enemy
-            condition2 = self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player)
-            condition3 = row < self.dimensions
-            condition4 = col > 0
+            condition1 = self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player)
+            condition2 = row < self.dimensions
+            condition3 = col > 0
 
             update_row = increment
             update_col = decrement
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # West
         try:
-            condition1 = self.layout[row][col - 1].color == enemy
-            condition2 = self.check_direction(direction="west", row=row, col=col - 1, player=player)
-            condition3 = col > 0
-            condition4 = True
+            condition1 = self.check_direction(direction="west", row=row, col=col - 1, player=player)
+            condition2 = col > 0
+            condition3 = True
 
             update_row = static
             update_col = decrement
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
         # Northwest
         try:
-            condition1 = self.layout[row - 1][col - 1].color == enemy
-            condition2 = self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player)
-            condition3 = row > 0
-            condition4 = col > 0
+            condition1 = self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player)
+            condition2 = row > 0
+            condition3 = col > 0
 
             update_row = decrement
             update_col = decrement
 
-            updated = self.abstract(row=row, col=col, enemy=enemy, condition1=condition1, condition2=condition2,
-                                    condition3=condition3, condition4=condition4, update_row=update_row,
-                                    update_col=update_col, updated=updated)
+            updated = self.get_updates(row=row, col=col, enemy=enemy, condition1=condition1,
+                                       condition2=condition2, condition3=condition3, update_row=update_row,
+                                       update_col=update_col, updated=updated)
         except:
             pass
 
@@ -227,21 +220,27 @@ class Board:
 
         return updated
 
-    def abstract(self, row, col, enemy, condition1, condition2, condition3, condition4, update_row, update_col, updated):
-        if condition1:
-            if condition2:
-                while condition3 and condition4:
-                    if self.layout[row][col].color == enemy:
-                        try:
-                            self.flip(row=row, col=col)
-                            updated.append((row, col))
-                            row = update_row(row)
-                            col = update_col(col)
-                        except:
-                            break
-                    else:
-                        row = update_row(row)
-                        col = update_col(col)
+    def get_updates(self, row, col, enemy, condition1, condition2, condition3, update_row, update_col, updated):
+        """TODO"""
+        urow = row
+        ucol = col
+        if condition1:  # Check if the move is legal
+            while condition2 and condition3: # Check that we haven't gone outside the boundary
+                if self.layout[urow][ucol].color == enemy:
+                    # try:
+                    self.flip(row=urow, col=ucol)
+                    updated.append((urow, ucol))
+                    urow = update_row(urow)
+                    ucol = update_col(ucol)
+                    # except:
+                    #     break
+                elif not self.layout[urow][ucol].occupied:
+                    break
+                elif self.layout[urow][ucol] != enemy and (urow != row or ucol != col):
+                    break
+                else:
+                    urow = update_row(urow)
+                    ucol = update_col(ucol)
 
         return updated
 
