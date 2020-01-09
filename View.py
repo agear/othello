@@ -13,6 +13,7 @@ class View:
         self.legal = turtle.Turtle()
         self.last_legal_moves = []
 
+        self.legal.penup()
         self.legal.speed(0)
         self.legal.hideturtle()
 

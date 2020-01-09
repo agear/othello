@@ -25,6 +25,27 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(tile.color, 0)
         self.assertEqual("[w]", tile.__str__())
 
+    def test_clear_tile(self):
+        b = Board()
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][w][b][_][_][_]|\n'
+                         '|[_][_][_][b][w][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
+
+        b.clear_tile(row=3, col=3)
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][b][_][_][_]|\n'
+                         '|[_][_][_][b][w][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
+
     def test_BoardStr(self):
         """TODO"""
         b2 = Board(dimensions=2)
@@ -258,6 +279,20 @@ class TestBoard(unittest.TestCase):
         # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
         # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
         # self.assertRaises(AssertionError, b4.place, row=1, col=1, player=1)
+
+    def test_is_gameover(self):
+        pass
+
+    def test_get_opponent(self):
+        """TODO"""
+        b = Board()
+
+        self.assertEqual(1, b.get_opponent(0))
+        self.assertEqual(0, b.get_opponent(1))
+        self.assertRaises(AssertionError, b.get_opponent, 2)
+        self.assertRaises(AssertionError, b.get_opponent, "player 1")
+        self.assertRaises(AssertionError, b.get_opponent, -1)
+        self.assertRaises(AssertionError, b.get_opponent, 3.7)
 
     def test_getLegal(self):
         """TODO"""
