@@ -33,6 +33,23 @@ class TestTile(unittest.TestCase):
         self.assertEqual(tile.color, 0)
         self.assertEqual("[w]", tile.__str__())
 
+    def test_clear(self):
+        tile = Tile()
+        tile.place(player=0)
+        self.assertEqual(tile.color, 0)
+        tile.clear()
+        self.assertEqual(tile.color, None)
+        self.assertEqual(tile.occupied, False)
+
+    def test_str(self):
+        tile = Tile()
+        self.assertEqual("[_]", tile.__str__())
+        tile.place(player=0)
+        self.assertEqual("[w]", tile.__str__())
+        tile.flip()
+        self.assertEqual("[b]", tile.__str__())
+
+
 class TestBoard(unittest.TestCase):
     """TODO"""
 
@@ -57,6 +74,18 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
 
+
+    def test_clear_board(self):
+        b = Board()
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][w][b][_][_][_]|\n'
+                         '|[_][_][_][b][w][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
+
         b.clear_board()
         self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n'
@@ -67,29 +96,9 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
 
-    def test_BoardStr(self):
-        """TODO"""
-        b2 = Board(dimensions=2)
-        self.assertEqual('|[w][b]|\n'
-                         '|[b][w]|\n', b2.__str__())
 
-        # Board dimensions must be divisible by 2
-        self.assertRaises(AssertionError, Board, dimensions=3 )
-        b4 = Board(dimensions=4)
-        self.assertEqual('|[_][_][_][_]|\n'
-                         '|[_][w][b][_]|\n'
-                         '|[_][b][w][_]|\n'
-                         '|[_][_][_][_]|\n', b4.__str__())
-
-        b8 = Board(dimensions=8)
-        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
-                         '|[_][_][_][_][_][_][_][_]|\n'
-                         '|[_][_][_][_][_][_][_][_]|\n'
-                         '|[_][_][_][w][b][_][_][_]|\n'
-                         '|[_][_][_][b][w][_][_][_]|\n'
-                         '|[_][_][_][_][_][_][_][_]|\n'
-                         '|[_][_][_][_][_][_][_][_]|\n'
-                         '|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
+    def test_update_points(self):
+        pass
 
 
     def test_flip(self):
@@ -252,10 +261,9 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][b][_][_][b][_]|\n'
                          '|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
 
-        # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
-        # self.assertRaises(AssertionError, b4.place, row=0, col=0, player=1)
-        # self.assertRaises(AssertionError, b4.place, row=0, col=1, player=0)
-        # self.assertRaises(AssertionError, b4.place, row=1, col=1, player=1)
+
+    def test_raw_place(self):
+        pass
 
     def test_is_gameover(self):
         b = Board()
@@ -288,7 +296,16 @@ class TestBoard(unittest.TestCase):
         self.assertRaises(AssertionError, b.get_opponent, -1)
         self.assertRaises(AssertionError, b.get_opponent, 3.7)
 
-    def test_getLegal(self):
+    def test_updateLayout(self):
+        pass
+
+    def test_get_updates(self):
+        pass
+
+    def test_get_legal_helper(self):
+        pass
+
+    def test_get_legal(self):
         """TODO"""
         # Test correct legal opening moves for white
         b = Board()
@@ -407,7 +424,32 @@ class TestBoard(unittest.TestCase):
                          '|[_][b][w][_]|\n'
                          '|[_][_][_][_]|\n', b4.__str__())
 
+    def test_check_direction(self):
+        pass
 
+    def test_str(self):
+        """TODO"""
+        b2 = Board(dimensions=2)
+        self.assertEqual('|[w][b]|\n'
+                         '|[b][w]|\n', b2.__str__())
+
+        # Board dimensions must be divisible by 2
+        self.assertRaises(AssertionError, Board, dimensions=3 )
+        b4 = Board(dimensions=4)
+        self.assertEqual('|[_][_][_][_]|\n'
+                         '|[_][w][b][_]|\n'
+                         '|[_][b][w][_]|\n'
+                         '|[_][_][_][_]|\n', b4.__str__())
+
+        b8 = Board(dimensions=8)
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][w][b][_][_][_]|\n'
+                         '|[_][_][_][b][w][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
 
 # To Run tests from the editor/PyCharm
 if __name__ == '__main__':

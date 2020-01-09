@@ -15,7 +15,6 @@ class Board:
         self.setup_board()
 
 
-
     def setup_board(self) -> None:
         """TODO"""
         for row in range(self.dimensions):
@@ -27,6 +26,7 @@ class Board:
                 row.append(tile)
         self.set_start_tiles()
 
+
     def set_start_tiles(self) -> None:
         """TODO"""
         self.layout[self.dimensions // 2][self.dimensions // 2].place(0)
@@ -34,16 +34,16 @@ class Board:
         self.layout[(self.dimensions // 2) - 1][self.dimensions // 2].place(1)
         self.layout[(self.dimensions // 2)][(self.dimensions // 2) - 1].place(1)
 
+    def clear_tile(self, row: int, col: int) -> None:
+        """TODO"""
+        self.layout[row][col].clear()
+
     def clear_board(self) -> None:
         for row in range(self.dimensions):
             for col in range(self.dimensions):
                 self.clear_tile(row=row, col=col)
 
 
-    def clear_tile(self, row: int, col: int) -> None:
-        """TODO"""
-        self.layout[row][col].color = None
-        self.layout[row][col].occupied = False
 
     def update_points(self) -> None:
         """TODO"""
@@ -76,13 +76,16 @@ class Board:
         self.gameover = self.is_gameover()
         return updated
 
+
     def raw_place(self, row: int, col: int, player: int) -> None:
         """TODO"""
         self.layout[row][col].place(player)
 
+
     def is_gameover(self) -> bool:
         """TODO"""
         return not bool(self.get_legal(player=0)) and not bool(self.get_legal(player=1))
+
 
     def get_opponent(self, player: int) -> int:
         """TODO"""
@@ -129,6 +132,7 @@ class Board:
 
         return updated
 
+
     def get_updates(self, row: int, col: int, opponent: int, condition1: bool, condition2: bool, condition3: bool,
                     update_row: Callable[[int], int], update_col: Callable[[int],int],
                     updated: List[tuple]) -> List[tuple]:
@@ -152,6 +156,7 @@ class Board:
 
         return updated
 
+
     def get_legal_helper(self, direction: tuple, row: int, col: int, player: int, opponent: int, legal: Set[tuple]) -> Set[tuple]:
         """TODO"""
         try:
@@ -161,6 +166,7 @@ class Board:
             return legal
         except:
             return legal
+
 
     def get_legal(self, player: int) -> Set[tuple]:
         """TODO"""
@@ -187,6 +193,7 @@ class Board:
                         legal = self.get_legal_helper(direction=direction, row=row, col=col, player=player, opponent=opponent, legal=legal)
 
         return legal
+
 
     def check_direction(self, direction: str, row: int, col: int, player: int) -> bool:
         """TODO"""
@@ -290,6 +297,10 @@ class Tile:
             self.color = 1
         elif self.color is 1:
             self.color = 0
+
+    def clear(self) -> None:
+        self.occupied = False
+        self.color = None
 
     def __str__(self) -> str:
         if not self.occupied:
