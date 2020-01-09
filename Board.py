@@ -32,8 +32,10 @@ class Board:
         self.layout[row][col].color = None
         self.layout[row][col].occupied = False
 
-    def clear_board(self):
-        pass
+    def clear_board(self) -> None:
+        for row in range(self.dimensions):
+            for col in range(self.dimensions):
+                self.clear_tile(row=row, col=col)
 
 
     def set_start_tiles(self):
@@ -74,7 +76,8 @@ class Board:
         self.gameover = self.is_gameover()
         return updated
 
-
+    def raw_place(self, row: int, col: int, player: int) -> None:
+        self.layout[row][col].place(player)
 
     def is_gameover(self) -> bool:
         return not bool(self.get_legal(player=0)) and not bool(self.get_legal(player=1))

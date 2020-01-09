@@ -46,11 +46,22 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
 
+        b.clear_board()
+        self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n'
+                         '|[_][_][_][_][_][_][_][_]|\n', b.__str__())
+
     def test_BoardStr(self):
         """TODO"""
         b2 = Board(dimensions=2)
         self.assertEqual('|[w][b]|\n'
                          '|[b][w]|\n', b2.__str__())
+
         # Board dimensions must be divisible by 2
         self.assertRaises(AssertionError, Board, dimensions=3 )
         b4 = Board(dimensions=4)
@@ -58,6 +69,7 @@ class TestBoard(unittest.TestCase):
                          '|[_][w][b][_]|\n'
                          '|[_][b][w][_]|\n'
                          '|[_][_][_][_]|\n', b4.__str__())
+
         b8 = Board(dimensions=8)
         self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n'
@@ -156,15 +168,8 @@ class TestBoard(unittest.TestCase):
         # Set up an empty board
         b8 = Board()
 
-        b8.layout[4][4].color = None
-        b8.layout[3][3].color = None
-        b8.layout[3][4].color = None
-        b8.layout[4][3].color = None
+        b8.clear_board()
 
-        b8.layout[4][4].occupied = False
-        b8.layout[3][3].occupied = False
-        b8.layout[3][4].occupied = False
-        b8.layout[4][3].occupied = False
         self.assertEqual('|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n'
@@ -174,27 +179,13 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][_][_][_][_][_]|\n'
                          '|[_][_][_][_][_][_][_][_]|\n', b8.__str__())
 
-
-        b8.layout[0][0].color = 0
-        b8.layout[0][0].occupied = True
-
-        b8.layout[1][1].color = 1
-        b8.layout[1][1].occupied = True
-
-        b8.layout[2][2].color = 1
-        b8.layout[2][2].occupied = True
-
-        b8.layout[4][4].color = 1
-        b8.layout[4][4].occupied = True
-
-        b8.layout[5][5].color = 0
-        b8.layout[5][5].occupied = True
-
-        b8.layout[6][6].color = 1
-        b8.layout[6][6].occupied = True
-
-        b8.layout[7][7].color = 1
-        b8.layout[7][7].occupied = True
+        b8.raw_place(row=0, col=0, player=0)
+        b8.raw_place(row=1, col=1, player=1)
+        b8.raw_place(row=2, col=2, player=1)
+        b8.raw_place(row=4, col=4, player=1)
+        b8.raw_place(row=5, col=5, player=0)
+        b8.raw_place(row=6, col=6, player=1)
+        b8.raw_place(row=7, col=7, player=1)
 
         self.assertEqual('|[w][_][_][_][_][_][_][_]|\n'
                          '|[_][b][_][_][_][_][_][_]|\n'
@@ -205,26 +196,14 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][_][_][_][b][_]|\n'
                          '|[_][_][_][_][_][_][_][b]|\n', b8.__str__())
 
-        b8.layout[0][3].color = 0
-        b8.layout[0][3].occupied = True
+        b8.raw_place(row=0, col=3, player=0)
+        b8.raw_place(row=1, col=3, player=1)
+        b8.raw_place(row=2, col=3, player=1)
+        b8.raw_place(row=4, col=3, player=1)
+        b8.raw_place(row=5, col=3, player=0)
+        b8.raw_place(row=6, col=3, player=1)
+        b8.raw_place(row=7, col=3, player=1)
 
-        b8.layout[1][3].color = 1
-        b8.layout[1][3].occupied = True
-
-        b8.layout[2][3].color = 1
-        b8.layout[2][3].occupied = True
-
-        b8.layout[4][3].color = 1
-        b8.layout[4][3].occupied = True
-
-        b8.layout[5][3].color = 0
-        b8.layout[5][3].occupied = True
-
-        b8.layout[6][3].color = 1
-        b8.layout[6][3].occupied = True
-
-        b8.layout[7][3].color = 1
-        b8.layout[7][3].occupied = True
 
         self.assertEqual('|[w][_][_][w][_][_][_][_]|\n'
                          '|[_][b][_][b][_][_][_][_]|\n'
@@ -235,26 +214,13 @@ class TestBoard(unittest.TestCase):
                          '|[_][_][_][b][_][_][b][_]|\n'
                          '|[_][_][_][b][_][_][_][b]|\n', b8.__str__())
 
-        b8.layout[3][0].color = 0
-        b8.layout[3][0].occupied = True
-
-        b8.layout[3][1].color = 1
-        b8.layout[3][1].occupied = True
-
-        b8.layout[3][2].color = 1
-        b8.layout[3][2].occupied = True
-
-        b8.layout[3][4].color = 1
-        b8.layout[3][4].occupied = True
-
-        b8.layout[3][5].color = 0
-        b8.layout[3][5].occupied = True
-
-        b8.layout[3][6].color = 1
-        b8.layout[3][6].occupied = True
-
-        b8.layout[3][7].color = 1
-        b8.layout[3][7].occupied = True
+        b8.raw_place(row=3, col=0, player=0)
+        b8.raw_place(row=3, col=1, player=1)
+        b8.raw_place(row=3, col=2, player=1)
+        b8.raw_place(row=3, col=4, player=1)
+        b8.raw_place(row=3, col=5, player=0)
+        b8.raw_place(row=3, col=6, player=1)
+        b8.raw_place(row=3, col=7, player=1)
 
         self.assertEqual('|[w][_][_][w][_][_][_][_]|\n'
                          '|[_][b][_][b][_][_][_][_]|\n'
@@ -281,7 +247,24 @@ class TestBoard(unittest.TestCase):
         # self.assertRaises(AssertionError, b4.place, row=1, col=1, player=1)
 
     def test_is_gameover(self):
-        pass
+        b = Board()
+        self.assertFalse(b.is_gameover())
+        b.clear_board()
+        for row in range(b.dimensions):
+            for col in range(b.dimensions):
+                b.raw_place(row=row, col=col, player=0)
+
+        self.assertEqual('|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n'
+                         '|[w][w][w][w][w][w][w][w]|\n', b.__str__())
+        
+        self.assertTrue(b.is_gameover())
+
 
     def test_get_opponent(self):
         """TODO"""
