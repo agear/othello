@@ -14,7 +14,7 @@ class View:
         self.last_legal_moves = []
 
         self.legal.penup()
-        self.legal.speed(0)
+        self.legal.speed(-4)
         self.legal.hideturtle()
 
         corner = -self.dimensions * self.square / 2
@@ -42,22 +42,21 @@ class View:
         corner = -self.dimensions * self.square / 2
         self.othello.setposition(corner, corner)
 
-        # Draw the green background
-        self.othello.begin_fill()
-        for i in range(4):
-            self.othello.pendown()
-            self.othello.forward(self.square * self.dimensions)
-            self.othello.left(90)
-        self.othello.end_fill()
+        self.draw_green_background()
 
-        # Draw the horizontal lines
-        for i in range(self.dimensions + 1):
-            self.othello.setposition(corner, self.square * i + corner)
-            self.othello.pendown()
-            self.othello.forward(self.square * self.dimensions)
-            self.othello.penup()
+        self.draw_horizontal_lines(corner=corner)
 
-        # Draw the vertical lines
+        self.draw_vertical_lines(corner=corner)
+
+        self.draw_start_tiles()
+
+    def draw_start_tiles(self):
+        self.draw_tile(row=3, col=3, color=0)
+        self.draw_tile(row=3, col=4, color=1)
+        self.draw_tile(row=4, col=3, color=1)
+        self.draw_tile(row=4, col=4, color=0)
+
+    def draw_vertical_lines(self, corner: float) -> None:
         self.othello.left(90)
         for i in range(self.dimensions + 1):
             self.othello.setposition(self.square * i + corner, corner)
@@ -65,11 +64,20 @@ class View:
             self.othello.forward(self.square * self.dimensions)
             self.othello.penup()
 
-        # Draw start tiles
-        self.draw_tile(row=3, col=3, color=0)
-        self.draw_tile(row=3, col=4, color=1)
-        self.draw_tile(row=4, col=3, color=1)
-        self.draw_tile(row=4, col=4, color=0)
+    def draw_horizontal_lines(self, corner: float) -> None:
+        for i in range(self.dimensions + 1):
+            self.othello.setposition(corner, self.square * i + corner)
+            self.othello.pendown()
+            self.othello.forward(self.square * self.dimensions)
+            self.othello.penup()
+
+    def draw_green_background(self):
+        self.othello.begin_fill()
+        for i in range(4):
+            self.othello.pendown()
+            self.othello.forward(self.square * self.dimensions)
+            self.othello.left(90)
+        self.othello.end_fill()
 
     def draw_tile(self, row: int, col: int, color: int) -> None:
         """TODO"""
@@ -122,17 +130,3 @@ class View:
 
 
 
-    # def erase_legal(self, row: int, col: int) -> None:
-    #     row = -(row - 3)
-    #     col = col - 3
-    #     y = row * self.square + (self.square/2)
-    #     x = col * self.square
-    #
-    #
-    #     self.othello.penup()
-    #     self.othello.goto(x, y)
-    #     self.othello.pendown()
-    #     self.othello.color("forest green", "forest green")
-    #     self.othello.begin_fill()
-    #     self.othello.circle(self.circle-5)
-    #     self.othello.end_fill()

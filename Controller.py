@@ -11,23 +11,23 @@ class Controller:
         self.view = View(dimensions)
 
 
-    def gameloop(self) -> None:
-        """TODO"""
-        self.draw_board()
-        while not self.board.gameover:
-            if bool(self.board.get_legal(0)):
-                print(self.board)
-                legal = self.board.get_legal(player=0)
-                print("Legal moves for white: ", legal)
-                self.play(player=0)
-
-            if bool(self.board.get_legal(1)):
-                print(self.board)
-                legal = self.board.get_legal(player=1)
-                print("Legal moves for black: ", legal)
-                self.play(player=1)
-        print("Game over")
-        self.getWinner()
+    # def gameloop(self) -> None:
+    #     """TODO"""
+    #     self.draw_board()
+    #     while not self.board.gameover:
+    #         if bool(self.board.get_legal(0)):
+    #             print(self.board)
+    #             legal = self.board.get_legal(player=0)
+    #             print("Legal moves for white: ", legal)
+    #             self.play(player=0)
+    #
+    #         if bool(self.board.get_legal(1)):
+    #             print(self.board)
+    #             legal = self.board.get_legal(player=1)
+    #             print("Legal moves for black: ", legal)
+    #             self.play(player=1)
+    #     print("Game over")
+    #     self.getWinner()
 
     def play(self, player: int) -> None:
         """TODO"""
@@ -72,7 +72,7 @@ class Controller:
         """TODO"""
         self.view.draw_board()
 
-    def update_view(self, updated: List[tuple]) -> None:
+    def update_view(self, updated: List[tuple], player: int) -> None:
         """TODO"""
         self.view.erase_previous_legal()
 
@@ -81,7 +81,8 @@ class Controller:
             col = coordinate[1]
             self.view.draw_tile(row=row, col=col, color=self.board.layout[row][col].color)
 
-        self.view.draw_all_legal(self.board.get_legal(player=0))
+        if player is 1:
+            self.view.draw_all_legal(self.board.get_legal(player=0))
 
 
     def translate(self, x: float) -> int:
@@ -90,9 +91,13 @@ class Controller:
         value = -1
         for section in range(int(left_boarder), int(x), int(self.view.square)):
             value += 1
-        print(value)
+        # print(value)
         return value
 
+    def play(self, row: int, col: int, player: int):
+        updated = self.board.place(row=row, col=col, player=player)
+        self.view.draw_tile(row=row, col=col, color=player)
+        self.update_view(updated=updated, player=player)
 
     def clickPlay(self, x: int, y: int) -> None:
         """TODO"""
@@ -103,15 +108,15 @@ class Controller:
         # Player 0 plays x, y if legal
         row = self.translate(-y)
         col = self.translate(x)
-        if not self.board.gameover:
+        if not self.board.is_gameover():
             try:
 
-                updated = self.board.place(row=row, col=col, player=0)
-
-
-                self.view.draw_tile(row=row, col=col, color=0)
-                self.update_view(updated)
-                if self.board.gameover:
+                self.play(row=row, col=col, player=0)
+                # updated = self.board.place(row=row, col=col, player=0)
+                #
+                # self.view.draw_tile(row=row, col=col, color=0)
+                # self.update_view(updated)
+                if self.board.is_gameover():
                     print("Game over")
                     self.getWinner()
                     time.sleep(5)
@@ -122,9 +127,10 @@ class Controller:
                 time.sleep(1)
                 legalAImoves = self.board.get_legal(player=1)
                 random_move = random.choice(tuple(legalAImoves))
-                updated = self.board.place(row=random_move[0], col=random_move[1], player=1)
-                self.view.draw_tile(row=random_move[0], col=random_move[1], color=1)
-                self.update_view(updated)
+                # updated = self.board.place(row=random_move[0], col=random_move[1], player=1)
+                # self.view.draw_tile(row=random_move[0], col=random_move[1], color=1)
+                # self.update_view(updated)
+                self.play(row=random_move[0], col=random_move[1], player=1)
                 print("White points: {}\nBlack points: {}".format(self.board.white_points, self.board.black_points))
                 if not bool(self.board.get_legal(player=0)):
                     while not bool(self.board.get_legal(player=0)):

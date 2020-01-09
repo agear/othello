@@ -12,11 +12,11 @@ class Board:
         self.gameover = False
         self.white_points = 0
         self.black_points = 0
-        self.setup()
+        self.setup_board()
 
 
 
-    def setup(self):
+    def setup_board(self) -> None:
         """TODO"""
         for row in range(self.dimensions):
             row = []
@@ -27,10 +27,12 @@ class Board:
                 row.append(tile)
         self.set_start_tiles()
 
-    def clear_tile(self, row: int, col: int) -> None:
+    def set_start_tiles(self) -> None:
         """TODO"""
-        self.layout[row][col].color = None
-        self.layout[row][col].occupied = False
+        self.layout[self.dimensions // 2][self.dimensions // 2].place(0)
+        self.layout[(self.dimensions // 2) - 1][(self.dimensions // 2) - 1].place(0)
+        self.layout[(self.dimensions // 2) - 1][self.dimensions // 2].place(1)
+        self.layout[(self.dimensions // 2)][(self.dimensions // 2) - 1].place(1)
 
     def clear_board(self) -> None:
         for row in range(self.dimensions):
@@ -38,12 +40,10 @@ class Board:
                 self.clear_tile(row=row, col=col)
 
 
-    def set_start_tiles(self):
+    def clear_tile(self, row: int, col: int) -> None:
         """TODO"""
-        self.layout[self.dimensions // 2][self.dimensions // 2].place(0)
-        self.layout[(self.dimensions // 2) - 1][(self.dimensions // 2) - 1].place(0)
-        self.layout[(self.dimensions // 2) - 1][self.dimensions // 2].place(1)
-        self.layout[(self.dimensions // 2)][(self.dimensions // 2) - 1].place(1)
+        self.layout[row][col].color = None
+        self.layout[row][col].occupied = False
 
     def update_points(self) -> None:
         """TODO"""
@@ -77,13 +77,17 @@ class Board:
         return updated
 
     def raw_place(self, row: int, col: int, player: int) -> None:
+        """TODO"""
         self.layout[row][col].place(player)
 
     def is_gameover(self) -> bool:
+        """TODO"""
         return not bool(self.get_legal(player=0)) and not bool(self.get_legal(player=1))
 
     def get_opponent(self, player: int) -> int:
+        """TODO"""
         assert player is 0 or player is 1
+
         if player is 0:
             return 1
         else:
@@ -102,125 +106,24 @@ class Board:
         decrement = lambda x: x - 1
         static = lambda x: x
 
-        # North
-        try:
-            condition1 = self.check_direction(direction="north", row=row - 1, col=col, player=player)
-            condition2 = row > 0
-            condition3 = True
+        north = (self.check_direction(direction="north", row=row - 1, col=col, player=player), row > 0, True, decrement, static)
+        northeast = (self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player), row > 0, col < self.dimensions, decrement, increment)
+        east = (self.check_direction(direction="east", row=row, col=col + 1, player=player), col < self.dimensions, True, static, increment)
+        southeast = (self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player), row < self.dimensions, col < self.dimensions, increment, increment)
+        south = (self.check_direction(direction="south", row=row + 1, col=col, player=player), row < self.dimensions, True, increment, static)
+        southwest = (self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player), row < self.dimensions, col > 0, increment, decrement)
+        west = (self.check_direction(direction="west", row=row, col=col - 1, player=player), col > 0, True, static, decrement)
+        northwest = (self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player), row > 0, col > 0, decrement, decrement)
 
-            update_row = decrement
-            update_col = static
+        directions = (north, northeast, east, southeast, south, southwest, west, northwest)
 
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # Northeast
-        try:
-            condition1 = self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player)
-            condition2 = row > 0
-            condition3 = col < self.dimensions
-
-            update_row = decrement
-            update_col = increment
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # East
-        try:
-            condition1 = self.check_direction(direction="east", row=row, col=col + 1, player=player)
-            condition2 = col < self.dimensions
-            condition3 = True
-
-            update_row = static
-            update_col = increment
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # Southeast
-        try:
-            condition1 = self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player)
-            condition2 = row < self.dimensions
-            condition3 = col < self.dimensions
-
-            update_row = increment
-            update_col = increment
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # South
-        try:
-            condition1 = self.check_direction(direction="south", row=row + 1, col=col, player=player)
-            condition2 = row < self.dimensions
-            condition3 = True
-
-            update_row = increment
-            update_col = static
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # Southwest
-        try:
-            condition1 = self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player)
-            condition2 = row < self.dimensions
-            condition3 = col > 0
-
-            update_row = increment
-            update_col = decrement
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # West
-        try:
-            condition1 = self.check_direction(direction="west", row=row, col=col - 1, player=player)
-            condition2 = col > 0
-            condition3 = True
-
-            update_row = static
-            update_col = decrement
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
-
-        # Northwest
-        try:
-            condition1 = self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player)
-            condition2 = row > 0
-            condition3 = col > 0
-
-            update_row = decrement
-            update_col = decrement
-
-            updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=condition1,
-                                       condition2=condition2, condition3=condition3, update_row=update_row,
-                                       update_col=update_col, updated=updated)
-        except:
-            pass
+        for direction in directions:
+            try:
+                updated = self.get_updates(row=row, col=col, opponent=opponent, condition1=direction[0],
+                                           condition2=direction[1], condition3=direction[2], update_row=direction[3],
+                                           update_col=direction[4], updated=updated)
+            except:
+                pass
 
         self.update_points()
 
@@ -249,10 +152,11 @@ class Board:
 
         return updated
 
-    def helper(self, collection: tuple, row: int, col: int, player: int, opponent: int, legal: Set[tuple]) -> Set[tuple]:
+    def get_legal_helper(self, direction: tuple, row: int, col: int, player: int, opponent: int, legal: Set[tuple]) -> Set[tuple]:
+        """TODO"""
         try:
-            if self.layout[collection[1]][collection[2]].color == opponent:
-                if self.check_direction(direction=collection[0], row=collection[1], col=collection[2], player=player):
+            if self.layout[direction[1]][direction[2]].color == opponent:
+                if self.check_direction(direction=direction[0], row=direction[1], col=direction[2], player=player):
                     legal.add((row, col))
             return legal
         except:
@@ -268,55 +172,20 @@ class Board:
             for col in range(self.dimensions):
                 if not self.layout[row][col].occupied:
 
-                    northTuple = ("north", row-1, col)
-                    northeastTuple = ("northeast", row-1, col+1)
-                    eastTuple = ("east", row, col+1)
-                    southeastTuple = ("southeast", row+1, col+1)
-                    southTuple = ("south", row+1, col)
-                    southwestTuple = ("southwest", row + 1, col - 1)
-                    westTuple = ("west", row, col-1)
-                    northwestTuple = ("northwest", row - 1, col - 1)
+                    north = ("north", row-1, col)
+                    northeast = ("northeast", row-1, col+1)
+                    east = ("east", row, col+1)
+                    southeast = ("southeast", row+1, col+1)
+                    south = ("south", row+1, col)
+                    southwest = ("southwest", row + 1, col - 1)
+                    west = ("west", row, col-1)
+                    northwest = ("northwest", row - 1, col - 1)
 
-                    legal = self.helper(collection=northTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=northeastTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=eastTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=southeastTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=southTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=southwestTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=westTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
-                    legal = self.helper(collection=northwestTuple, row=row, col=col, player=player, opponent=opponent, legal=legal)
+                    directions = (north, northeast, east, southeast, south, southwest, west, northwest)
 
+                    for direction in directions:
+                        legal = self.get_legal_helper(direction=direction, row=row, col=col, player=player, opponent=opponent, legal=legal)
 
-                    # # Diagonal
-                    # try:
-                    #     if self.layout[row - 1][col + 1].color == opponent:
-                    #         if self.check_direction(direction="northeast", row=row - 1, col=col + 1, player=player):
-                    #             legal.add((row, col))
-                    # except:
-                    #     pass
-                    #
-                    # try:
-                    #     if self.layout[row - 1][col - 1].color == opponent:
-                    #         if self.check_direction(direction="northwest", row=row - 1, col=col - 1, player=player):
-                    #             legal.add((row, col))
-                    # except:
-                    #     pass
-                    #
-                    # try:
-                    #     if self.layout[row + 1][col + 1].color == opponent:
-                    #         if self.check_direction(direction="southeast", row=row + 1, col=col + 1, player=player):
-                    #             legal.add((row, col))
-                    # except:
-                    #     pass
-                    #
-                    # try:
-                    #     if self.layout[row + 1][col - 1].color == opponent:
-                    #         if self.check_direction(direction="southwest", row=row + 1, col=col - 1, player=player):
-                    #             legal.add((row, col))
-                    # except:
-                    #     pass
-
-        # print(legal)
         return legal
 
     def check_direction(self, direction: str, row: int, col: int, player: int) -> bool:

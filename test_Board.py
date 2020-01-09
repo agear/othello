@@ -2,8 +2,9 @@ import unittest
 from Board import Board
 from Board import Tile
 
-class TestBoard(unittest.TestCase):
+class TestTile(unittest.TestCase):
     """TODO"""
+
     def test_Tile(self):
         """TODO"""
         tile = Tile()
@@ -11,11 +12,18 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(tile.color, None)
         self.assertRaises(ValueError, tile.flip)
         self.assertEqual("[_]", tile.__str__())
-        tile.place(0)
+
+    def test_place(self):
+        tile = Tile()
+        tile.place(player=0)
         self.assertEqual(tile.color, 0)
         self.assertRaises(ValueError, tile.place, 1)
         self.assertEqual(tile.occupied, True)
         self.assertEqual(tile.color, 0)
+
+    def test_flip(self):
+        tile = Tile()
+        tile.place(player=0)
         tile.flip()
         self.assertEqual(tile.occupied, True)
         self.assertEqual(tile.color, 1)
@@ -24,6 +32,9 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(tile.occupied, True)
         self.assertEqual(tile.color, 0)
         self.assertEqual("[w]", tile.__str__())
+
+class TestBoard(unittest.TestCase):
+    """TODO"""
 
     def test_clear_tile(self):
         b = Board()
@@ -262,7 +273,7 @@ class TestBoard(unittest.TestCase):
                          '|[w][w][w][w][w][w][w][w]|\n'
                          '|[w][w][w][w][w][w][w][w]|\n'
                          '|[w][w][w][w][w][w][w][w]|\n', b.__str__())
-        
+
         self.assertTrue(b.is_gameover())
 
 
